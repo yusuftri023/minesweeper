@@ -2,6 +2,7 @@
 let panjang = Number(prompt("Panjang kotak")) || 9;
 let lebar = Number(prompt("Lebar Kotak")) || 9;
 let jumlahBom = Number(prompt("Jumlah Bom")) || 15;
+let remainingTiles = panjang * lebar;
 let gameState = true;
 let tileNumber = 0;
 let numberOfTurn = 0;
@@ -209,7 +210,8 @@ function createTiles() {
       });
     document
       .getElementById(`hide-${tileIndex}`)
-      .addEventListener("mouseup", (event) => {
+      .addEventListener("mouseup", () => {
+        --remainingTiles;
         if (gameState === false) {
           document
             .getElementById(`cover-${tileIndex}`)
@@ -228,7 +230,14 @@ function createTiles() {
           timerIsOn = false;
 
           document.getElementById("reset-btn").textContent = "😱";
+          return;
         }
+        if (remainingTiles === jumlahBom) {
+          gameState = false;
+          timerIsOn = false;
+          document.getElementById("reset-btn").textContent = "🥳";
+        }
+
         ++numberOfTurn;
       });
   }
@@ -240,6 +249,7 @@ function reset() {
   timerIsOn = false;
   gameState = true;
   tileNumber = 0;
+  remainingTiles = panjang * lebar;
   minSecond.textContent = 0;
   minFirst.textContent = 0;
   secSecond.textContent = 0;
