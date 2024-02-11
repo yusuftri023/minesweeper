@@ -45,8 +45,28 @@ const trigger = function () {
     secFirst.textContent = timerNow.slice(3, 4);
   }, 1000);
 };
+
 /**
  * Membuat lokasi bomb yang unik sesuai jumlah yang ditentukan dalam format array panjangxlebar
+ * @param {number} number
+ * @param {number} xMatrix
+ * @param {number} yMatrix
+ * @param {callback function} callback
+ * @returns {array}
+ *
+ * contoh array hasil:
+ * [
+ * ["💣","💣","O","💣","O","O"],
+ * ["O","💣","O","💣","O","O"],
+ * ["O","💣","O","💣","O","O"],
+ * ["O","O","O","💣","O","O"],
+ * ["💣","💣","O","💣","O","💣"],
+ * ["O","💣","O","💣","O","O"],
+ * ["💣","💣","💣","💣","O","O"],
+ * ["O","💣","O","💣","O","O"],
+ * ["💣","O","O","💣","O","O"]
+ * ]
+ *
  */
 function generateLocation(number, xMatrix, yMatrix, callback) {
   try {
@@ -71,7 +91,24 @@ function generateLocation(number, xMatrix, yMatrix, callback) {
 
   return callback(location);
 }
-
+/**
+ * membuat jarak lantai aman ke lantai yang berisi bom
+ * @param {array} location
+ * @returns {array}
+ *
+ * contoh array hasil:
+ * [
+ * ["💣","💣","4","💣","2"," "],
+ * ["1","💣","6","💣","3"," "],
+ * ["2","💣","5","💣","3"," "],
+ * ["2","3","4","💣","4","1"],
+ * ["💣","💣","4","💣","3","💣"],
+ * ["3","💣","6","💣","3","1"],
+ * ["💣","💣","💣","💣","3"," "],
+ * ["3","💣","5","💣","3"," "],
+ * ["💣","2","3","💣","2"," "]
+ * ]
+ */
 function generateDistance(location) {
   let completeMap = [];
   for (let i = 0; i < location.length; i++) {
@@ -167,12 +204,16 @@ function generateDistance(location) {
 
   return completeMap;
 }
+
+/**
+ * membuat element lantai/tile di section game sesuai array yang berisi posisi lengkap lantai/tile
+ * @param {array} completeMap
+ */
 function generateTiles(completeMap) {
   const table = document.getElementById("tiles");
-
-  for (let row of completeMap) {
+  completeMap.forEach((row) => {
     let rowElm = document.createElement("tr");
-    for (let tile of row) {
+    row.forEach((tile) => {
       let tileElm = document.createElement("td");
       let tileElmBuffer = document.createElement("div");
       let coverElm = document.createElement("span");
@@ -189,10 +230,14 @@ function generateTiles(completeMap) {
       tileElmBuffer.appendChild(coverElm);
       rowElm.appendChild(tileElm);
       tileNumber++;
-    }
+    });
     table.appendChild(rowElm);
-  }
+  });
 }
+
+/**
+ * menambahkan event listener pada setiap tile/lantai yang telah dibuat
+ */
 function createTiles() {
   for (let tileIndex = 0; tileIndex < tileNumber; tileIndex++) {
     document
@@ -228,7 +273,6 @@ function createTiles() {
         if (tileValue === "💣") {
           gameState = false;
           timerIsOn = false;
-
           document.getElementById("reset-btn").textContent = "😱";
           return;
         }
@@ -237,12 +281,15 @@ function createTiles() {
           timerIsOn = false;
           document.getElementById("reset-btn").textContent = "🥳";
         }
-
         ++numberOfTurn;
       });
   }
   document.querySelector("main").setAttribute("style", "opacity:100%;");
 }
+
+/**
+ * callback function untuk tombol reset
+ */
 function reset() {
   let tileContainer = document.querySelector(".tiles-container");
   let newTable = document.createElement("table");
@@ -265,3 +312,4 @@ function reset() {
 }
 generateTiles(generateLocation(jumlahBom, panjang, lebar, generateDistance));
 createTiles();
+document.getElementById("input").set;
