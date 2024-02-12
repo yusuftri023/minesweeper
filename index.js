@@ -56,15 +56,9 @@ const trigger = function () {
  *
  * contoh array hasil:
  * [
- * ["💣","💣","O","💣","O","O"],
- * ["O","💣","O","💣","O","O"],
- * ["O","💣","O","💣","O","O"],
- * ["O","O","O","💣","O","O"],
- * ["💣","💣","O","💣","O","💣"],
- * ["O","💣","O","💣","O","O"],
- * ["💣","💣","💣","💣","O","O"],
- * ["O","💣","O","💣","O","O"],
- * ["💣","O","O","💣","O","O"]
+ * ["💣","💣","O"],
+ * ["O","💣","O"],
+ * ["O","💣","O"],
  * ]
  *
  */
@@ -98,15 +92,9 @@ function generateLocation(number, xMatrix, yMatrix, callback) {
  *
  * contoh array hasil:
  * [
- * ["💣","💣","4","💣","2"," "],
- * ["1","💣","6","💣","3"," "],
- * ["2","💣","5","💣","3"," "],
- * ["2","3","4","💣","4","1"],
- * ["💣","💣","4","💣","3","💣"],
- * ["3","💣","6","💣","3","1"],
- * ["💣","💣","💣","💣","3"," "],
- * ["3","💣","5","💣","3"," "],
- * ["💣","2","3","💣","2"," "]
+ * ["💣","💣","2"],
+ * ["3","💣","3"],
+ * ["2","💣","2"],
  * ]
  */
 function generateDistance(location) {
@@ -214,21 +202,11 @@ function generateTiles(completeMap) {
   completeMap.forEach((row) => {
     let rowElm = document.createElement("tr");
     row.forEach((tile) => {
-      let tileElm = document.createElement("td");
-      let tileElmBuffer = document.createElement("div");
-      let coverElm = document.createElement("span");
-      let hideElm = document.createElement("span");
-      tileElmBuffer.textContent = tile;
-      tileElmBuffer.setAttribute("class", "tile");
-      tileElmBuffer.setAttribute("id", `tile-${tileNumber}`);
-      hideElm.setAttribute("class", "hide");
-      hideElm.setAttribute("id", `hide-${tileNumber}`);
-      coverElm.setAttribute("class", "cover-tile");
-      coverElm.setAttribute("id", `cover-${tileNumber}`);
-      tileElm.appendChild(tileElmBuffer);
-      tileElm.appendChild(hideElm);
-      tileElmBuffer.appendChild(coverElm);
-      rowElm.appendChild(tileElm);
+      let html = `<td>
+      <div class="tile" id="tile-${tileNumber}">${tile}<span class="cover-tile" id="cover-${tileNumber}"></span></div>
+      <span class="hide" id="hide-${tileNumber}"></span></td>
+`;
+      rowElm.innerHTML += html;
       tileNumber++;
     });
     table.appendChild(rowElm);
@@ -312,4 +290,3 @@ function reset() {
 }
 generateTiles(generateLocation(jumlahBom, panjang, lebar, generateDistance));
 createTiles();
-document.getElementById("input").set;
